@@ -1,1 +1,94 @@
-hi
+<!DOCTYPE html>
+<html>
+    <head>
+        <style type="text/css">
+            #wrap {
+                width: 190mm;
+                height: 247mm;
+                // border: 1px solid #000;
+            }
+            .barcode {
+                width:50%;
+                margin-top: 100px;
+            }
+            @media print
+            {
+                .no-print, .no-print *
+                {
+                    display: none !important;
+                }
+            }
+
+        </style>
+        <script src="https://cdn.jsdelivr.net/jsbarcode/3.3.20/JsBarcode.all.min.js"></script>
+        <script type="text/javascript">
+            window.addEventListener('load', function() {
+                render();
+            });
+            function render() {
+                const textarea = document.getElementById('textValues');
+
+                const array = textarea.value.split('\n');
+
+                console.log('array', array);
+
+                const wrap = document.getElementById('wrap');
+                wrap.innerHTML = "";
+                const xmlns = "http://www.w3.org/2000/svg";
+
+                const type = document.getElementById('type').value;
+                array.forEach((v, i) => {
+                    const value = v.trim();
+                    if (!value) {
+                        return;
+                    }
+                    const ele = document.createElementNS(xmlns, 'svg');
+                    ele.setAttributeNS(null, 'class', 'barcode');
+                    ele.setAttributeNS(null, 'jsbarcode-format', type);
+                    ele.setAttributeNS(null, 'jsbarcode-value', v);
+                    ele.setAttributeNS(null, 'jsbarcode-width', '2');
+                    ele.setAttributeNS(null, 'jsbarcode-height', '20');
+                    wrap.appendChild(ele);
+                });
+
+                JsBarcode('.barcode').init();
+            }
+        </script>
+    </head>
+    <body>
+        <div id="wrap">
+
+        </div>
+        <div class="no-print">
+            <select id="type" style="width:150px; height:40px;">
+                <option value="CODE128">CODE128</option>
+                <option value="CODE128A">CODE128 A</option>
+                <option value="CODE128B">CODE128 B</option>
+                <option value="CODE128C">CODE128 C</option>
+                <option value="EAN13">EAN13</option>
+                <option value="EAN8">EAN8</option>
+                <option value="UPC">UPC</option>
+                <option value="CODE39">CODE39</option>
+                <option value="ITF14">ITF14</option>
+                <option value="ITF">ITF</option>
+                <option value="MSI">MSI</option>
+                <option value="MSI10">MSI10</option>
+                <option value="MSI11">MSI11</option>
+                <option value="MSI1010">MSI1010</option>
+                <option value="MSI1110">MSI1110</option>
+                <option value="pharmacode">Pharmacode</option>
+            </select><button onclick="render();" style="width:150px; height:40px;">Render Barcode</button><br/>
+            <textarea id="textValues" style="width:190mm; height:180px" >@L1
+@L2
+@L3
+@L4
+916128034707
+916128034714
+916128034721
+829534911756
+121212121212
+000000000000</textarea><br/>
+
+        </div>
+    </body>
+</html>
